@@ -33,6 +33,18 @@ class ActionRespondGreet(Action):
         return []
 
 
+class ActionRespondAskName(Action):
+    def name(self) -> Text:
+        return "respond_ask_name"
+
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        responses = [
+            "Меня зовут Бот!",
+            "Я — ваш помощник, Бот."
+        ]
+        dispatcher.utter_message(text=random.choice(responses))
+        return []
+
 class ActionRespondGoodbye(Action):
     def name(self) -> Text:
         return "action_respond_goodbye"
@@ -107,18 +119,18 @@ class ActionGoogleSearch(Action):
     def name(self) -> Text:
         return "action_google_search"
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        # Получаем query из сущности или всего сообщения
+        query = next(tracker.get_latest_entity_values("query"), None) or " ".join(
+            tracker.latest_message["text"].split()[1:])
 
-        query = next(tracker.get_latest_entity_values("query"), None)
-        if query:
-            url = f"https://www.google.com/search?q={query}"
-            webbrowser.open(url)
-            dispatcher.utter_message(
-                text=f"Открываю результаты поиска по запросу: {query}")
-        else:
+        if not query:
             dispatcher.utter_message(text="Пожалуйста, укажите запрос для поиска.")
+            return []
+
+        url = f"https://www.google.com/search?q={query}"
+        webbrowser.open(url)
+        dispatcher.utter_message(text=f"Открываю результаты по запросу: {query}")
         return []
 
 
@@ -172,30 +184,33 @@ class ActionSentimentAnalysis(Action):
     def name(self) -> Text:
         return "action_sentiment_analysis"
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        # Используем последнее сообщение, если сущность не извлечена
+        text = next(tracker.get_latest_entity_values("text"), None) or tracker.latest_message.get("text")
 
-        text = next(tracker.get_latest_entity_values("text"), None)
-        if text:
-            try:
-                translated = translator.translate(text, src='ru', dest='en').text
-                blob = TextBlob(translated)
-                polarity = round(blob.sentiment.polarity, 2)
+        if not text:
+            dispatcher.utter_message(text="Пожалуйста, укажите текст для анализа.")
+            return []
 
-                if polarity > 0.1:
-                    sentiment = "позитивная 😊"
-                elif polarity < -0.1:
-                    sentiment = "негативная 😞"
-                else:
-                    sentiment = "нейтральная 😐"
+        try:
+            # Анализ тональности
+            translated = translator.translate(text, src='ru', dest='en').text
+            blob = TextBlob(translated)
+            polarity = round(blob.sentiment.polarity, 2)
 
-                dispatcher.utter_message(
-                    text=f"Тональность сообщения: {sentiment}. Коэффициент: {polarity}")
-            except Exception as e:
-                dispatcher.utter_message(text="Не удалось определить тональность.")
-        else:
-            dispatcher.utter_message(text="Пожалуйста, предоставьте текст для анализа.")
+            # Определение тональности
+            if polarity > 0.1:
+                sentiment = "позитивная 😊"
+            elif polarity < -0.1:
+                sentiment = "негативная 😞"
+            else:
+                sentiment = "нейтральная 😐"
+
+            dispatcher.utter_message(text=f"Тональность сообщения: {sentiment}. Коэффициент: {polarity}")
+
+        except Exception as e:
+            dispatcher.utter_message(text="Ошибка при анализе тональности.")
+
         return []
 
 

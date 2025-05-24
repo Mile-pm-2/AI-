@@ -2,15 +2,16 @@ version: "3.1"
 
 
 rules:
-- rule: Analyze text
-  steps:
-  - intent: analyze_text
-  - action: action_analyze_text
 
-- rule: say_greet
+- rule: Greet user
   steps:
     - intent: greet
-    - action: ActionRespondGreet
+    - action: action_respond_greet
+
+- rule: Math operations
+  steps:
+    - intent: math
+    - action: action_handle_math
 
 - rule: Handle name request
   steps:
@@ -32,7 +33,27 @@ rules:
   - intent: sentiment
   - action: action_sentiment_analysis
 
+- rule: Analyze text
+  steps:
+  - intent: analyze_text
+  - action: action_analyze_text
+
 - rule: tell_joke
   steps:
     - intent: joke
-    - action: ActionTellJoke
+    - action: action_tell_joke
+
+- rule: Goodbye
+  steps:
+    - intent: goodbye
+    - action: action_respond_goodbye
+
+- rule: Show time
+  steps:
+    - intent: time
+    - action: action_show_time
+
+- rule: Show date
+  steps:
+    - intent: date
+    - action: action_show_date

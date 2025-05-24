@@ -28,6 +28,7 @@ responses:
 
 actions:
   - action_respond_greet
+  - respond_ask_name
   - action_respond_goodbye
   - action_show_time
   - action_show_date
