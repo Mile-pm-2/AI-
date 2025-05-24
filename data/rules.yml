@@ -1,0 +1,38 @@
+version: "3.1"
+
+
+rules:
+- rule: Analyze text
+  steps:
+  - intent: analyze_text
+  - action: action_analyze_text
+
+- rule: say_greet
+  steps:
+    - intent: greet
+    - action: ActionRespondGreet
+
+- rule: Handle name request
+  steps:
+  - intent: ask_name
+  - action: respond_ask_name
+
+- rule: Weather request
+  steps:
+  - intent: ask_weather
+  - action: action_get_weather
+
+- rule: Google search
+  steps:
+  - intent: search
+  - action: action_google_search
+
+- rule: Sentiment analysis
+  steps:
+  - intent: sentiment
+  - action: action_sentiment_analysis
+
+- rule: tell_joke
+  steps:
+    - intent: joke
+    - action: ActionTellJoke

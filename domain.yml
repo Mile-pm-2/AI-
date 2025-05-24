@@ -1,0 +1,39 @@
+version: "3.1"
+
+intents:
+  - greet
+  - ask_name
+  - ask_weather
+  - search
+  - analyze_text
+  - sentiment
+  - goodbye
+  - joke
+  - time
+  - date
+  - math
+
+entities:
+  - query
+  - text
+
+responses:
+  respond_ask_name:
+  - text: "Меня зовут Бот!"
+  - text: "Я — ваш верный помощник, Бот."
+
+  respond_capabilities:
+  - text: "Я могу отвечать на вопросы, искать информацию в интернете и показывать погоду!"
+  - text: "Я могу помочь вам с поиском и даже рассказать анекдот!"
+
+actions:
+  - action_respond_greet
+  - action_respond_goodbye
+  - action_show_time
+  - action_show_date
+  - action_get_weather
+  - action_google_search
+  - action_analyze_text
+  - action_sentiment_analysis
+  - action_tell_joke
+  - action_handle_math
