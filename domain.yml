@@ -12,10 +12,29 @@ intents:
   - time
   - date
   - math
+  - provide_name
+  - provide_city
 
 entities:
   - query
   - text
+  - user_name
+  - user_city
+
+slots:
+  user_name:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: user_name
+    influence_conversation: false
+
+  user_city:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: user_city
+    influence_conversation: false
 
 responses:
   respond_ask_name:
@@ -38,3 +57,5 @@ actions:
   - action_sentiment_analysis
   - action_tell_joke
   - action_handle_math
+  - action_save_user_data
+

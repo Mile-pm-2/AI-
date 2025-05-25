@@ -18,6 +18,7 @@ nlu:
     - как тебя зовут?
     - твое имя?
     - как к тебе обращаться?
+    - кто ты?
 
 - intent: ask_weather
   examples: |
@@ -100,3 +101,29 @@ nlu:
     - 45/9
     - 84 - 42
     - 432*15
+
+- intent: provide_name
+  examples: |
+    - меня зовут [Анна](user_name)
+    - имя [Иван](user_name)
+    - [Ольга](user_name)
+    - мое имя (user_name)
+    - меня зовут
+    - мое имя
+    - имя
+    - меня зовут [Миша](user_name)
+    - имя [Коля](user_name)
+    - [Женя](user_name)
+
+- intent: provide_city
+  examples: |
+    - я живу в [Москве](user_city)
+    - мой город [Санкт-Петербург](user_city)
+    - [Казань](user_city)
+    - я живу в (user_city)
+    - мой город (user_city)
+    - я живу в
+    - мой город
+    - я живу в [Нижнем Новгороде](user_city)
+    - мой город [Москва](user_city)
+    - [Питер](user_city)

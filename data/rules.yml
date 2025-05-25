@@ -57,3 +57,14 @@ rules:
   steps:
     - intent: date
     - action: action_show_date
+
+- rule: Save user name
+  steps:
+    - intent: provide_name
+    - action: action_save_user_data
+
+- rule: Save user city
+  steps:
+    - intent: provide_city
+    - action: action_save_user_data
+

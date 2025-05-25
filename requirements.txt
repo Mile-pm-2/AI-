@@ -5,3 +5,4 @@ textblob
 googletrans
 requests
 python-dotenv
+sqlite3

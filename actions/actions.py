@@ -9,12 +9,13 @@ import spacy
 from textblob import TextBlob
 from googletrans import Translator
 from collections import defaultdict
+import sqlite3
+
 
 nlp = spacy.load("ru_core_news_sm")
 translator = Translator()
 API_KEY = "93a53a60f881396460ca8faa30decc9b"
 WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
-
 
 class ActionRespondGreet(Action):
     def name(self) -> Text:
@@ -31,7 +32,6 @@ class ActionRespondGreet(Action):
         ]
         dispatcher.utter_message(text=random.choice(responses))
         return []
-
 
 class ActionRespondAskName(Action):
     def name(self) -> Text:
@@ -60,7 +60,6 @@ class ActionRespondGoodbye(Action):
         dispatcher.utter_message(text=random.choice(responses))
         return []
 
-
 class ActionShowTime(Action):
     def name(self) -> Text:
         return "action_show_time"
@@ -72,7 +71,6 @@ class ActionShowTime(Action):
         dispatcher.utter_message(text=f"Сейчас {current_time}.")
         return []
 
-
 class ActionShowDate(Action):
     def name(self) -> Text:
         return "action_show_date"
@@ -83,7 +81,6 @@ class ActionShowDate(Action):
         current_date = datetime.datetime.now().strftime("%d.%m.%Y")
         dispatcher.utter_message(text=f"Сегодня {current_date}.")
         return []
-
 
 class ActionGetWeather(Action):
     def name(self) -> Text:
@@ -114,7 +111,6 @@ class ActionGetWeather(Action):
             dispatcher.utter_message(text="Ошибка при получении погоды.")
         return []
 
-
 class ActionGoogleSearch(Action):
     def name(self) -> Text:
         return "action_google_search"
@@ -132,7 +128,6 @@ class ActionGoogleSearch(Action):
         webbrowser.open(url)
         dispatcher.utter_message(text=f"Открываю результаты по запросу: {query}")
         return []
-
 
 class ActionAnalyzeText(Action):
     def name(self) -> Text:
@@ -179,7 +174,6 @@ class ActionAnalyzeText(Action):
             dispatcher.utter_message(text="Пожалуйста, предоставьте текст для анализа.")
         return []
 
-
 class ActionSentimentAnalysis(Action):
     def name(self) -> Text:
         return "action_sentiment_analysis"
@@ -213,7 +207,6 @@ class ActionSentimentAnalysis(Action):
 
         return []
 
-
 class ActionTellJoke(Action):
     def name(self) -> Text:
         return "action_tell_joke"
@@ -229,7 +222,6 @@ class ActionTellJoke(Action):
         dispatcher.utter_message(text=random.choice(jokes))
         return []
 
-
 class ActionHandleMath(Action):
     def name(self) -> Text:
         return "action_handle_math"
@@ -244,4 +236,38 @@ class ActionHandleMath(Action):
             dispatcher.utter_message(text=f"Результат: {result}")
         except:
             dispatcher.utter_message(text="Не могу вычислить это выражение")
+        return []
+
+
+class ActionSaveUserData(Action):
+    def name(self) -> Text:
+        return "action_save_user_data"
+
+    async def run(
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]
+    ) -> List[Dict[Text, Any]]:
+        user_id = tracker.sender_id
+        entities = tracker.latest_message.get("entities", [])
+        name = tracker.get_slot("user_name")
+        city = tracker.get_slot("user_city")
+        try:
+            conn = sqlite3.connect('user_data.db')
+            cursor = conn.cursor()
+
+            cursor.execute(''' INSERT OR REPLACE INTO users (user_id, name, city) VALUES (?, ?, ?) ''', (user_id, name, city))
+
+            conn.commit()
+            dispatcher.utter_message("Данные сохранены!")
+
+        except sqlite3.Error as e:
+            logger.error(f"Database error: {e}")
+            dispatcher.utter_message("Ошибка базы данных.")
+
+        finally:
+            if conn:
+                conn.close()
+
         return []
