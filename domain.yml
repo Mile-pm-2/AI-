@@ -1,0 +1,61 @@
+version: "3.1"
+
+intents:
+  - greet
+  - ask_name
+  - ask_weather
+  - search
+  - analyze_text
+  - sentiment
+  - goodbye
+  - joke
+  - time
+  - date
+  - math
+  - provide_name
+  - provide_city
+
+entities:
+  - query
+  - text
+  - user_name
+  - user_city
+
+slots:
+  user_name:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: user_name
+    influence_conversation: false
+
+  user_city:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: user_city
+    influence_conversation: false
+
+responses:
+  respond_ask_name:
+  - text: "Меня зовут Бот!"
+  - text: "Я — ваш верный помощник, Бот."
+
+  respond_capabilities:
+  - text: "Я могу отвечать на вопросы, искать информацию в интернете и показывать погоду!"
+  - text: "Я могу помочь вам с поиском и даже рассказать анекдот!"
+
+actions:
+  - action_respond_greet
+  - respond_ask_name
+  - action_respond_goodbye
+  - action_show_time
+  - action_show_date
+  - action_get_weather
+  - action_google_search
+  - action_analyze_text
+  - action_sentiment_analysis
+  - action_tell_joke
+  - action_handle_math
+  - action_save_user_data
+

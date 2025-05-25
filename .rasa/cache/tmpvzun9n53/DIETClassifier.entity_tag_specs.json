@@ -1,0 +1,36 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-location",
+      "2": "I-location",
+      "3": "L-location",
+      "4": "U-location",
+      "5": "B-query",
+      "6": "I-query",
+      "7": "L-query",
+      "8": "U-query",
+      "9": "B-text",
+      "10": "I-text",
+      "11": "L-text",
+      "12": "U-text",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-location": 1,
+      "I-location": 2,
+      "L-location": 3,
+      "U-location": 4,
+      "B-query": 5,
+      "I-query": 6,
+      "L-query": 7,
+      "U-query": 8,
+      "B-text": 9,
+      "I-text": 10,
+      "L-text": 11,
+      "U-text": 12,
+      "O": 0
+    },
+    "num_tags": 13
+  }
+]
