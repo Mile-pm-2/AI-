@@ -1,0 +1,7 @@
+rasa
+spacy
+ru-core-news-sm
+textblob
+googletrans
+requests
+python-dotenv
